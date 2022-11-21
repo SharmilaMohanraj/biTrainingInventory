@@ -1,12 +1,21 @@
-import React, { useState } from "react";
-import { AppBar, Typography, Toolbar, Tabs, Tab, Button, useMediaQuery, useTheme } from '@mui/material';
+import React from "react";
+import { AppBar, Typography, Toolbar, Button} from '@mui/material';
 import DrawerComponent from "./DrawerComponent";
-const PAGES = ["Services", "About Us", "Contact Us"]
+import { useNavigate } from "react-router-dom";
 function Header(props: any) {
-    const [highlight, setHighlight] = useState();
-    const theme = useTheme();
-    const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+    let navigate = useNavigate();
+    const [userName,setUserName] = React.useState('');
 
+    React.useEffect(() => {
+        const userName = localStorage.getItem("userName");
+        if (userName != null && userName !== '') {
+            setUserName(JSON.parse(userName));
+        }
+    }, []);
+    const logOut = () => {
+        localStorage.setItem("userToken", '');
+        navigate('/login');
+    }
     return (
         <React.Fragment>
             <AppBar sx={{ background: "#063970" }}>
@@ -14,37 +23,11 @@ function Header(props: any) {
                     <DrawerComponent />
                     <Typography sx={{ fontSize: '1.5rem', paddingLeft: '10%' }}>
                         {" "}
-                        Welcome {props.props.userName}
+                        Welcome {userName}
                     </Typography>
-                    <Button onClick={props.props.logOut} sx={{ marginLeft: "auto" }} variant="contained">
+                    <Button onClick={logOut} sx={{ marginLeft: "auto" }} variant="contained">
                         Logout{" "}
                     </Button>
-                    {/*
-                        isMatch ? (
-                            <>
-                                <Typography sx={{fontSize:'1.5rem', paddingLeft:'10%'}}>
-                                    {" "}
-                                    Welcome user
-                                </Typography>
-                                <DrawerComponent />
-                            </>
-
-                        ) : (
-                            <>
-                                <Tabs sx={{marginLeft:'auto'}} textColor="inherit" value={highlight} onChange={(e, highlight) => setHighlight(highlight)}
-                                    indicatorColor="secondary">
-                                    {
-                                        PAGES.map((page, index) => (
-                                            <Tab key={index} label={page} />
-                                        ))
-                                    }
-                                </Tabs>
-                                <Button sx={{ marginLeft: "auto" }} variant="contained">
-                                    Logout{" "}
-                                </Button>
-                            </>
-                        )
-                        */}
                 </Toolbar>
             </AppBar>
         </React.Fragment>
