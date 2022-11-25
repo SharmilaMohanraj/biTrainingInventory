@@ -32,6 +32,9 @@ function SignUp(props: any) {
             return;
         }
         setOpen(false);
+        if(signUpStatus.message === "User is registered successfully"){
+            navigate('/login');
+        }
         setSignUpStatus({ severity: "", message: "" });
     };
 
@@ -46,8 +49,7 @@ function SignUp(props: any) {
                     if (response.data.error === 0) {
                         setOpen(true);
                         setSignUpStatus({ severity: "success", message: 'User is registered successfully' });
-                        localStorage.setItem("userName", JSON.stringify(userName));
-                        navigate('/login');
+                        localStorage.setItem("userName", JSON.stringify(userName));     
                     } if (response.data.error !== 0) {
                         setOpen(true);
                         setSignUpStatus({ severity: "error", message: response.data.message });
